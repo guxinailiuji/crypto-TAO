@@ -1,0 +1,514 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --font-geist: 'Inter', system-ui, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-geist);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+.font-geist-mono {
+    font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+}
+
+#supply-bar {
+    position: relative;
+    transition: width 1.5s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.rounded-lg {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rounded-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Typography refinements */
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+}
+
+p, li {
+    line-height: 1.6;
+}
+
+/* Subtle animation for rating bars */
+.bg-green-600, .bg-blue-600 {
+    transition: width 1s ease-out;
+}
+
+/* Custom styling for links */
+a {
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+/* Subtle hover effect for navigation */
+nav a:hover {
+    opacity: 0.8;
+}
+
+/* Refined spacing for mobile */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    section {
+        margin-bottom: 32px;
+    }
+}
+
+/* Refined tag styling */
+.rounded-full {
+    transition: all 0.2s ease;
+}
+
+.rounded-full:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 价格图表样式 */
+#price-chart, #rsi-chart {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+#price-chart canvas, #rsi-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* 筹码密集区样式 */
+[data-tooltip] {
+    position: relative;
+    cursor: pointer;
+}
+
+.relative {
+    position: relative;
+}
+
+/* 响应式图表调整 */
+@media (max-width: 768px) {
+    #price-chart {
+        height: 240px !important;
+    }
+    
+    #rsi-chart {
+        height: 120px !important;
+    }
+}
+
+/* 动态矿工价格样式 */
+.miner-shutdown-price {
+    position: relative;
+}
+
+.miner-shutdown-price::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #627EEA;
+}
+
+/* ETF弹出详情 */
+.etf-detail {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.etf-name {
+    font-weight: 500;
+    color: #4b5563;
+    grid-column: 1;
+}
+
+.etf-ticker {
+    font-weight: 600;
+    color: #1d4ed8;
+    grid-column: 2;
+}
+
+.etf-volume, .etf-aum {
+    color: #64748b;
+    font-size: 0.7rem;
+    grid-column: span 2;
+}
+
+/* 价格闪烁效果 */
+.binance-price {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes priceFlash {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.price-flash {
+    animation: priceFlash 0.8s ease-out;
+}
+
+/* 优化工具提示和ETF悬浮效果 */
+.more-etf {
+    position: relative;
+    z-index: 20;
+}
+
+.etf-tooltip {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    width: 280px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+    transform-origin: top center;
+}
+
+.more-etf:hover .etf-tooltip {
+    display: block;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.etf-tooltip:before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-left: 1px solid #e5e7eb;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* 增强型工具提示样式 */
+[data-tooltip]:hover:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1e293b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+    margin-bottom: 6px;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* 潜力评级和风险评级闪烁效果 */
+/* 强烈推荐的闪烁效果 */
+@keyframes strongPulse {
+    0% { background-color: rgba(16, 185, 129, 0.2); }
+    50% { background-color: rgba(16, 185, 129, 0.4); }
+    100% { background-color: rgba(16, 185, 129, 0.2); }
+}
+
+.animate-strong-pulse {
+    animation: strongPulse 2s infinite;
+}
+
+/* 风险提示的闪烁效果 */
+@keyframes riskPulse {
+    0% { background-color: rgba(239, 68, 68, 0.2); }
+    50% { background-color: rgba(239, 68, 68, 0.4); }
+    100% { background-color: rgba(239, 68, 68, 0.2); }
+}
+
+.animate-risk-pulse {
+    animation: riskPulse 2s infinite;
+}
+
+/* 评级条发光效果 */
+/* 应用于75%评级条的发光效果 */
+div[style*="width: 75%"].rating-bar .rating-glow,
+div[style*="width: 82%"].rating-bar .rating-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: ratingGlow 2s infinite;
+}
+
+/* 应用于65%评级条的发光效果 */
+div[style*="width: 65%"].rating-bar .rating-glow,
+div[style*="width: 68%"].rating-bar .rating-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: ratingGlow 2s infinite;
+}
+
+@keyframes ratingGlow {
+    0% { left: 0; }
+    100% { left: 100%; }
+}
+
+/* 推荐标签样式 */
+.recommendation-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-badge:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0) 0%,
+        rgba(16, 185, 129, 0.3) 50%,
+        rgba(16, 185, 129, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+/* 风险标签样式 */
+.risk-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.risk-badge:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(239, 68, 68, 0) 0%,
+        rgba(239, 68, 68, 0.3) 50%,
+        rgba(239, 68, 68, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(200%); }
+}
+
+/* 价格推荐闪亮效果 */
+.price-recommendation {
+    background-color: rgba(96, 165, 250, 0.1);
+    transition: all 0.3s ease;
+}
+
+.price-content {
+    transition: all 0.3s ease;
+}
+
+.price-recommendation:hover {
+    background-color: rgba(96, 165, 250, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* 标签动画效果 */
+.tag-animate {
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    transform: translateY(0);
+    opacity: 1;
+    animation: tagAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tag-animate:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.tag-animate:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.tag-animate:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes tagAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tag-animate::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-100%);
+    animation: tagSweep 3s ease-in-out infinite;
+}
+
+@keyframes tagSweep {
+    0% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* 供应量动画效果 */
+.supply-animation {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    width: 50px;
+    height: 100%;
+    animation: supplyShimmer 2s infinite linear;
+    transform: skewX(-20deg);
+}
+
+@keyframes supplyShimmer {
+    0% {
+        left: -50px;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* 淡入动画 */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 定制化的动画脉冲 */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.05);
+        filter: brightness(1.2);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 圆角和阴影修饰 */
+.crypto-card {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* 评级项悬停效果 */
+.rating-item {
+    transition: all 0.3s ease;
+}
+
+/* 确保评级条容器相对定位 */
+.rating-bar-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 供应条容器样式 */
+.supply-bar-container {
+    position: relative;
+    overflow: hidden;
+}

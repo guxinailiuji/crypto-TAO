@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>反关财经 - Bittensor (TAO) 分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-icons@0.309.0/dist/umd/lucide-icons.js">
+    <style>
+        /* 自定义社交媒体图标样式 */
+        .social-icon {
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.15);
+        }
+        
+        /* 自定义各平台悬停颜色 */
+        .bilibili-icon:hover {
+            color: #00a1d6 !important;
+        }
+        
+        .twitter-icon:hover {
+            color: #1DA1F2 !important;
+        }
+        
+        .youtube-icon:hover {
+            color: #FF0000 !important;
+        }
+        
+        .douyin-icon:hover {
+            color: #000000 !important;
+        }
+        
+        .kuaishou-icon:hover {
+            color: #ff5500 !important;
+        }
+        
+        .weibo-icon:hover {
+            color: #e6162d !important;
+        }
+
+        /* 掉落以太坊动画 */
+        @keyframes fallDown {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                transform: translateY(5px) translateX(0) rotate(36deg) scale(1.2);
+                opacity: 1;
+            }
+            20% {
+                transform: translateY(25px) translateX(0) rotate(72deg) scale(1);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh)) translateX(0) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sway {
+            0% { margin-left: -30px; }
+            50% { margin-left: 30px; }
+            100% { margin-left: -30px; }
+        }
+
+        .falling-crypto {
+            position: fixed;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            animation: fallDown 4s ease-in forwards, sway 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(98, 126, 234, 0.6));
+        }
+
+        /* 掉落Aave代币动画 */
+        @keyframes fallDown {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                transform: translateY(5px) translateX(0) rotate(36deg) scale(1.2);
+                opacity: 1;
+            }
+            20% {
+                transform: translateY(25px) translateX(0) rotate(72deg) scale(1);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh)) translateX(0) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* 提示消息样式 */
+        .follow-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1d4ed8, #7e22ce);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            z-index: 1001;
+            opacity: 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .follow-message.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        /* 发财字体特效 */
+        .highlight {
+            color: #FFD700;
+            font-weight: bold;
+            display: inline-block;
+            animation: pulse 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+            100% {
+                transform: scale(1.1);
+                text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        @keyframes percentagePulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .unlock-percentage {
+            animation: percentagePulse 2s infinite;
+        }
+
+        /* 时间轴动画 */
+        .bg-blue-500.rounded-full {
+            transition: all 0.3s ease;
+        }
+        
+        .bg-blue-500.rounded-full:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* 卡片悬停效果 */
+        .bg-blue-50.p-4.rounded-lg,
+        .bg-green-50.p-4.rounded-lg {
+            transition: all 0.3s ease;
+        }
+        
+        .bg-blue-50.p-4.rounded-lg:hover,
+        .bg-green-50.p-4.rounded-lg:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+    <!-- 防止缩放 -->
+    <script>
+        window.addEventListener("wheel", (e)=> {
+            const isPinching = e.ctrlKey
+            if(isPinching) e.preventDefault()
+        }, { passive: false })
+    </script>
+    
+    <!-- 导航栏 -->
+    <header class="border-b border-gray-200">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <h1 class="text-2xl font-bold">反关财经</h1>
+                <span class="text-sm text-gray-500 px-2 py-1 border border-gray-200 rounded-md">专业加密资产分析</span>
+            </div>
+            
+            <!-- 右侧社交媒体图标和链接 -->
+            <div class="flex items-center space-x-4">
+                <!-- 
+                    量化简介和算法教程链接
+                    请根据需要修改以下链接指向实际的页面：
+                    - 量化简介: https://www.bilibili.com/video/BV19V9qYTE4G/?vd_source=41c6120442315961ee3af89fa3459874
+                    - 算法教程: https://www.bilibili.com/video/BV19V9qYTE4G/?vd_source=41c6120442315961ee3af89fa3459874
+                -->
+                <div class="hidden md:flex items-center space-x-4 mr-2">
+                    <a href="https://www.bilibili.com/video/BV19V9qYTE4G/?vd_source=41c6120442315961ee3af89fa3459874" class="text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center font-medium">
+                        <i class="fas fa-chart-line mr-1"></i> 量化简介
+                    </a>
+                    <a href="https://www.bilibili.com/video/BV19V9qYTE4G/?vd_source=41c6120442315961ee3af89fa3459874" class="text-gray-700 hover:text-blue-600 transition-colors duration-300 flex items-center font-medium">
+                        <i class="fas fa-code mr-1"></i> 算法教程
+                    </a>
+                </div>
+                
+                <!-- 社交媒体图标和链接 -->
+                <div class="flex items-center space-x-3">
+                    <!-- 哔哩哔哩 -->
+                    <a href="https://space.bilibili.com/36229149" target="_blank" title="哔哩哔哩" class="social-icon bilibili-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906L17.813 4.653zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z" />
+                        </svg>
+                    </a>
+                    
+                    <!-- X/推特 -->
+                    <a href="https://x.com/Crypto_Hdy" target="_blank" title="推特" class="social-icon twitter-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    
+                    <!-- 油管/YouTube -->
+                    <a href="https://www.youtube.com/@fanguancaijing" target="_blank" title="YouTube" class="social-icon youtube-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg>
+                    </a>
+                    
+                    <!-- 抖音 -->
+                    <a href="https://www.douyin.com/user/YOUR_ACCOUNT" target="_blank" title="抖音" class="social-icon douyin-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+                        </svg>
+                    </a>
+                    
+                    <!-- 快手 -->
+                    <a href="https://www.kuaishou.com/profile/YOUR_ACCOUNT" target="_blank" title="快手" class="social-icon kuaishou-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 1024 1024" fill="currentColor">
+                            <path d="M512 0C229.376 0 0 229.376 0 512s229.376 512 512 512 512-229.376 512-512S794.624 0 512 0zm209.526 699.583c-20.77 15.976-44.3 27.517-70.046 34.523-42.948 11.443-88.013 8.99-131.256-2.05.147-61.338.295-122.676.443-184.013 69.164.494 138.328.988 207.492 1.482 1.383-25.321 0-51.132-4.69-75.869-65.8-.494-131.748-.988-197.548-1.482V301.167c-31.975.494-63.947.988-95.92 1.482-3.558 56.648-1.433 113.539-1.923 170.285-66.391-.494-132.93-.988-199.321-1.482-.443 26.603.295 53.35 2.51 79.807 65.8.494 131.748.988 197.548 1.482.494 65.8.988 131.6 1.482 197.548 23.838 1.826 47.766 2.906 71.703 3.104 32.025-.147 63.947-3.06 95.33-9.38 41.514-10.307 80.514-32.617 109.155-66.292 24.775-28.849 40.85-66.39 41.979-104.807 1.45-49.995-9.972-101.232-42.063-140.855-30.69-38.374-78.357-59.996-127.157-61.824-1.826-.051-5.431-.147-7.257-.197-2.463 25.025 4.641 50.638 20.421 70.786 14.15-1.285 28.9.641 41.86 7.7 25.518 13.681 40.9 40.948 47.077 69.207 7.748 35.31 1.137 74.996-20.819 102.316z" />
+                        </svg>
+                    </a>
+                    
+                    <!-- 微博 -->
+                    <a href="https://weibo.com/YOUR_ACCOUNT" target="_blank" title="微博" class="social-icon weibo-icon text-gray-600">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.737 5.439l-.002.004zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.18.601l.014-.028zm.176-2.719c-1.893-.493-4.033.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm7.563-1.224c-.346-.105-.57-.18-.405-.615.375-.977.42-1.804 0-2.404-.781-1.112-2.915-1.053-5.364-.03 0 0-.766.331-.571-.271.376-1.217.315-2.224-.27-2.809-1.338-1.337-4.869.045-7.888 3.08C1.309 10.87 0 13.273 0 15.348c0 3.981 5.099 6.395 10.086 6.395 6.536 0 10.888-3.801 10.888-6.82 0-1.822-1.547-2.854-2.915-3.284v.01zm1.908-5.092c-.766-.856-1.908-1.187-2.96-.962-.436.09-.706.511-.616.932.09.42.511.691.932.602.511-.105 1.067.044 1.442.465.376.421.466.977.316 1.473-.136.406.09.841.496.976.405.136.84-.09.976-.496.33-1.022.12-2.178-.646-3.035l.06.045zm2.418-2.195c-1.576-1.757-3.905-2.419-6.054-1.968-.496.104-.812.587-.706 1.083.104.496.586.811 1.082.707 1.532-.331 3.185.15 4.296 1.383.857.976 1.187 2.318.781 3.524-.136.526.18 1.052.706 1.188.526.135 1.052-.18 1.188-.706.614-1.892.15-4.026-1.398-5.25l.105.045z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <!-- 币种信息和所属板块移到最上面 -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-4">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/22974.png" alt="Bittensor" class="w-12 h-12">
+                    <div>
+                        <h2 class="text-3xl font-bold flex items-center">Bittensor (TAO)</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 所属板块 - 更小的简洁版本 -->
+            <div class="mb-4 mt-2 text-sm">
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium tag-animate">人工智能</span>
+                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full font-medium tag-animate">机器学习</span>
+                    <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium tag-animate">去中心化计算</span>
+                </div>
+                <p class="mt-3 text-gray-600">Bittensor是一个开源协议，为去中心化的区块链机器学习网络提供支持。机器学习模型在网络中协同训练，根据其对集体提供的信息价值获得TAO代币奖励。TAO还授予外部访问权限，允许用户从网络中提取信息并根据需求调整其活动。</p>
+            </div>
+        </section>
+
+        <!-- 前景展望 - 移除遮挡效果 -->
+        <section class="mb-10 border border-indigo-200 rounded-lg p-6 bg-gradient-to-r from-indigo-50 to-white shadow-sm animate-fade-in">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-binoculars text-indigo-600 mr-2"></i> 前景展望与投资建议
+            </h3>
+            <div class="text-gray-800 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 border border-indigo-200 rounded-lg relative">
+                        <h5 class="font-semibold text-center mb-2 flex items-center justify-center">
+                            <i class="fas fa-calendar-day text-indigo-500 mr-2"></i>短期展望 (3-6月)
+                        </h5>
+                        <ul class="text-sm space-y-2">
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 网络性能优化和AI模型升级</li>
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 矿工参与度和网络算力增长</li>
+                        </ul>
+                        <div class="price-recommendation mt-3 p-2 bg-indigo-100 rounded">
+                            <div class="price-content">
+                                <span class="font-semibold text-sm">推荐价格区间:</span>
+                                <div class="mt-1 flex justify-between">
+                                    <span class="text-red-600 font-bold text-sm">$250</span>
+                                    <span class="text-green-600 font-bold text-sm">$350</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border border-indigo-200 rounded-lg relative">
+                        <h5 class="font-semibold text-center mb-2 flex items-center justify-center">
+                            <i class="fas fa-calendar-week text-indigo-500 mr-2"></i>中期前景 (6-18月)
+                        </h5>
+                        <ul class="text-sm space-y-2">
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 机器学习模型多样性提升</li>
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 企业级AI应用生态扩张</li>
+                        </ul>
+                        <div class="price-recommendation mt-3 p-2 bg-indigo-100 rounded">
+                            <div class="price-content">
+                                <span class="font-semibold text-sm">推荐价格区间:</span>
+                                <div class="mt-1 flex justify-between">
+                                    <span class="text-red-600 font-bold text-sm">$400</span>
+                                    <span class="text-green-600 font-bold text-sm">$600</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border border-indigo-200 rounded-lg relative">
+                        <h5 class="font-semibold text-center mb-2 flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-indigo-500 mr-2"></i>长期展望 (2-5年)
+                        </h5>
+                        <ul class="text-sm space-y-2">
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 去中心化AI市场的主导地位</li>
+                            <li class="flex items-start"><i class="fas fa-circle-check text-indigo-500 mr-2 mt-0.5"></i> 全球AI计算资源整合</li>
+                        </ul>
+                        <div class="price-recommendation mt-3 p-2 bg-indigo-100 rounded">
+                            <div class="price-content">
+                                <span class="font-semibold text-sm">推荐价格区间:</span>
+                                <div class="mt-1 flex justify-between">
+                                    <span class="text-red-600 font-bold text-sm">$700</span>
+                                    <span class="text-green-600 font-bold text-sm">$1000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 border border-indigo-200 rounded-lg bg-white">
+                    <h5 class="font-semibold flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>核心观点
+                    </h5>
+                    <p class="mt-2">Bittensor作为去中心化AI和机器学习的创新平台，通过区块链技术创建了一个点对点的智能市场。随着AI技术的快速发展和应用场景的扩大，Bittensor有望成为连接全球AI计算资源和应用需求的重要基础设施。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 评级信息 -->
+        <section class="mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 潜力评级 -->
+                <div class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm crypto-card">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-rocket text-green-600 mr-2"></i>
+                        潜力评级
+                    </h3>
+                    <div class="mb-2 flex justify-between">
+                        <span class="font-medium">85%</span>
+                        <span class="text-green-600 font-bold flex items-center">
+                            <i class="fas fa-shield-alt mr-1"></i>
+                            强烈推荐
+                            <span class="recommendation-badge ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded-md text-xs font-bold animate-strong-pulse">建议买入</span>
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 rating-bar-container">
+                        <div class="bg-green-600 h-2.5 rounded-full animate-pulse rating-bar" style="width: 85%">
+                            <div class="rating-glow absolute h-full w-4 bg-white opacity-30"></div>
+                        </div>
+                    </div>
+                    <ul class="mt-4 text-sm space-y-2">
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-green-600 rounded-full mr-2"></span> 创新的去中心化AI架构</li>
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-green-600 rounded-full mr-2"></span> 强大的激励机制设计</li>
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-green-600 rounded-full mr-2"></span> AI市场快速增长潜力</li>
+                    </ul>
+                </div>
+                
+                <!-- 风险评级 -->
+                <div class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm crypto-card">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-triangle-exclamation text-yellow-600 mr-2"></i>
+                        风险评级
+                    </h3>
+                    <div class="mb-2 flex justify-between">
+                        <span class="font-medium">55%</span>
+                        <span class="text-yellow-600 font-bold flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            中等风险
+                            <span class="risk-badge ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-md text-xs font-bold animate-risk-pulse">适度投资</span>
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 rating-bar-container">
+                        <div class="bg-yellow-600 h-2.5 rounded-full animate-pulse rating-bar" style="width: 55%">
+                            <div class="rating-glow absolute h-full w-4 bg-white opacity-30"></div>
+                        </div>
+                    </div>
+                    <ul class="mt-4 text-sm space-y-2">
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-yellow-600 rounded-full mr-2"></span> AI技术发展不确定性</li>
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-yellow-600 rounded-full mr-2"></span> 去中心化AI竞争加剧</li>
+                        <li class="flex items-center rating-item"><span class="w-3 h-3 inline-block bg-yellow-600 rounded-full mr-2"></span> 网络安全性挑战</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 供应信息 -->
+        <section class="mb-10">
+            <h3 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fas fa-coins text-blue-500 mr-2"></i>
+                供应情况
+            </h3>
+            <div class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm crypto-card">
+                <!-- 基本供应信息 -->
+                <div class="flex justify-between mb-4">
+                    <span class="font-medium flex items-center">
+                        <i class="fas fa-layer-group text-blue-500 mr-1"></i> 流通量: 约8,609,410 TAO
+                    </span>
+                    <span class="font-medium flex items-center">
+                        <i class="fas fa-circle-nodes text-blue-500 mr-1"></i> 最大供应量: 21,000,000 TAO
+                    </span>
+                </div>
+                
+                <!-- 解锁进度 -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-3 flex items-center">
+                        <i class="fas fa-unlock text-blue-500 mr-2"></i>解锁进度
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- 已解锁 -->
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-gray-600">已解锁</span>
+                                <span class="text-lg font-bold text-green-600 unlock-percentage animate-pulse">45.31%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-green-500 h-2.5 rounded-full animate-pulse" style="width: 45.31%"></div>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">9.52M TAO</div>
+                        </div>
+                        
+                        <!-- 锁定中 -->
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-gray-600">锁定中</span>
+                                <span class="text-lg font-bold text-blue-600 unlock-percentage animate-pulse">51.57%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-blue-500 h-2.5 rounded-full animate-pulse" style="width: 51.57%"></div>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">10.83M TAO</div>
+                        </div>
+                        
+                        <!-- 未追踪 -->
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-gray-600">未追踪</span>
+                                <span class="text-lg font-bold text-gray-600 unlock-percentage animate-pulse">3.13%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-gray-500 h-2.5 rounded-full animate-pulse" style="width: 3.13%"></div>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">656.25K TAO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 解锁时间表 -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-clock text-blue-500 mr-2"></i>解锁时间表
+                    </h4>
+                    <div class="relative">
+                        <!-- 时间轴 -->
+                        <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-blue-200"></div>
+                        
+                        <!-- 解锁事件 -->
+                        <div class="space-y-6">
+                            <!-- Kusangi网络初始分发 -->
+                            <div class="relative pl-16">
+                                <div class="absolute left-6 w-4 h-4 bg-blue-500 rounded-full border-4 border-blue-100"></div>
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <div class="font-semibold text-blue-900">Kusangi网络初始分发</div>
+                                    <div class="text-sm text-gray-600">2021年1月3日 - 2021年5月</div>
+                                    <div class="mt-2 text-sm">首次代币分发阶段，通过Kusangi测试网进行</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Nakamoto网络迁移 -->
+                            <div class="relative pl-16">
+                                <div class="absolute left-6 w-4 h-4 bg-blue-500 rounded-full border-4 border-blue-100"></div>
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <div class="font-semibold text-blue-900">Nakamoto网络迁移</div>
+                                    <div class="text-sm text-gray-600">2021年11月2日</div>
+                                    <div class="mt-2 text-sm">从测试网迁移到主网，开始正式运营</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Finney网络启动 -->
+                            <div class="relative pl-16">
+                                <div class="absolute left-6 w-4 h-4 bg-blue-500 rounded-full border-4 border-blue-100"></div>
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <div class="font-semibold text-blue-900">Finney网络启动</div>
+                                    <div class="text-sm text-gray-600">2023年3月20日</div>
+                                    <div class="mt-2 text-sm">网络重大升级，引入新的功能和改进</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 持续发行 -->
+                            <div class="relative pl-16">
+                                <div class="absolute left-6 w-4 h-4 bg-green-500 rounded-full border-4 border-green-100"></div>
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <div class="font-semibold text-green-900">持续发行</div>
+                                    <div class="text-sm text-gray-600">当前进行中</div>
+                                    <div class="mt-2 text-sm">
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>每日线性释放</li>
+                                            <li>每4年减半一次</li>
+                                            <li>无锁定期</li>
+                                            <li>基于网络参与度分配给矿工和验证者</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-500 mt-8 space-y-2">
+                    <p class="flex items-center"><i class="fas fa-fire text-blue-500 mr-2"></i> TAO代币用于奖励网络贡献者和访问AI计算资源</p>
+                    <p class="flex items-center"><i class="fas fa-bolt text-blue-500 mr-2"></i> 参与网络验证和AI模型训练可获得TAO奖励</p>
+                    <p class="flex items-center"><i class="fas fa-chart-pie text-blue-500 mr-2"></i> 当前市值约23.6亿美元，排名全球第36位</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 投研分析 -->
+        <section class="mb-10">
+            <h3 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fas fa-magnifying-glass-chart text-blue-600 mr-2"></i>
+                投研分析
+            </h3>
+            
+            <!-- 宏观分析 -->
+            <div class="mb-8 border border-gray-200 rounded-lg p-6 bg-white shadow-sm crypto-card">
+                <h4 class="text-lg font-bold mb-4 border-b pb-2 flex items-center">
+                    <i class="fas fa-globe text-blue-600 mr-2"></i>
+                    宏观分析
+                </h4>
+                <div class="text-gray-800 space-y-4">
+                    <p>Bittensor的宏观投资逻辑建立在去中心化AI和机器学习的长期价值上。随着AI技术的快速发展和计算需求的增长，作为去中心化AI计算市场的先行者将为Bittensor带来持续的发展机会。</p>
+                    
+                    <h5 class="font-semibold">技术创新与应用</h5>
+                    <p>Bittensor采用创新的点对点智能市场机制，通过区块链技术实现AI模型的协同训练和价值评估。其独特的激励机制确保了网络参与者能够根据其贡献获得公平的回报，推动了AI技术的去中心化发展。</p>
+                    
+                    <h5 class="font-semibold">生态系统发展</h5>
+                    <p>Bittensor正积极构建开放的AI生态系统，通过代币激励吸引全球的开发者和计算资源提供者参与。其开放的协议设计为AI应用开发提供了坚实的基础，有望推动去中心化AI技术的广泛应用。</p>
+                </div>
+            </div>
+            
+            <!-- 微观分析 -->
+            <div class="mb-8 border border-gray-200 rounded-lg p-6 bg-white shadow-sm crypto-card">
+                <h4 class="text-lg font-bold mb-4 border-b pb-2 flex items-center">
+                    <i class="fas fa-microscope text-blue-600 mr-2"></i>
+                    微观分析
+                </h4>
+                <div class="text-gray-800 space-y-4">
+                    <p>从微观层面看，Bittensor的网络活动和发展进展保持强劲增长。</p>
+                    
+                    <h5 class="font-semibold">市场数据指标</h5>
+                    <p>Bittensor当前24小时交易量约1.3亿美元，价格维持在270美元以上。项目已在Binance、KuCoin等主流交易所上线，流动性充足，显示了市场对项目的认可。</p>
+                    
+                    <h5 class="font-semibold">技术发展</h5>
+                    <p>Bittensor持续推进技术创新，包括AI模型训练优化、网络性能提升等。这些技术升级进一步增强了网络的计算能力和可扩展性，为更多AI应用场景提供支持。</p>
+                    
+                    <h5 class="font-semibold">社区发展</h5>
+                    <p>Bittensor拥有活跃的开发者和矿工社区，通过代币激励机制吸引了大量参与者。项目由Jacob Steeves和Ala Shaabana领导，团队在计算机科学和AI研究领域拥有丰富经验。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>免责声明：本网站内容仅供参考，不构成投资建议。投资有风险，入市需谨慎。</p>
+            <p class="mt-2"><a href="https://flowith.net" target="_blank" class="text-gray-700 hover:underline">反观财经 不霁何虹</a>.</p>
+        </div>
+    </footer>
+
+    <!-- 提示消息 -->
+    <div id="followMessage" class="follow-message">关注我们，加入会员<span class="highlight">发大财</span>！</div>
+
+    <script src="script.js"></script>
+    
+    <!-- 掉落代币效果脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有社交媒体图标和教程链接
+            const socialIcons = document.querySelectorAll('.social-icon');
+            const tutorialLinks = document.querySelectorAll('.hidden.md\\:flex a');
+            const allClickableElements = [...socialIcons, ...tutorialLinks];
+            
+            // 获取消息提示元素
+            const followMessage = document.getElementById('followMessage');
+            
+            // TAO SVG内容
+            const taoSvg = `
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="32" fill="#2563EB"/>
+                    <path d="M32 8C18.745 8 8 18.745 8 32s10.745 24 24 24 24-10.745 24-24S45.255 8 32 8zm0 4.8c10.604 0 19.2 8.596 19.2 19.2S42.604 51.2 32 51.2 12.8 42.604 12.8 32 21.396 12.8 32 12.8zm0 4.8c-7.953 0-14.4 6.447-14.4 14.4S24.047 46.4 32 46.4s14.4-6.447 14.4-14.4S39.953 17.6 32 17.6zm0 4.8c5.302 0 9.6 4.298 9.6 9.6s-4.298 9.6-9.6 9.6-9.6-4.298-9.6-9.6 4.298-9.6 9.6-9.6z" fill="white"/>
+                </svg>
+            `;
+            
+            // 创建掉落代币效果
+            function createFallingCrypto() {
+                const crypto = document.createElement('div');
+                crypto.className = 'falling-crypto';
+                crypto.innerHTML = taoSvg;
+                crypto.style.left = Math.random() * window.innerWidth + 'px';
+                document.body.appendChild(crypto);
+                
+                // 动画结束后移除元素
+                crypto.addEventListener('animationend', () => {
+                    crypto.remove();
+                });
+            }
+            
+            // 为所有可点击元素添加事件监听器
+            allClickableElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    createFallingCrypto();
+                    followMessage.classList.add('show');
+                    setTimeout(() => {
+                        followMessage.classList.remove('show');
+                    }, 2000);
+                });
+            });
+            
+            // 定期创建掉落效果
+            setInterval(createFallingCrypto, 10000);
+        });
+    </script>
+</body>
+</html>
